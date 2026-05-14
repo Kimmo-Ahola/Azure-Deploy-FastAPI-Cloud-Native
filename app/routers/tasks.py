@@ -1,6 +1,6 @@
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from app.database import get_db
 from app import schemas, model
 
@@ -42,12 +42,7 @@ def create_task(payload: schemas.TaskCreate, db: Session = Depends(get_db)):
     responses=TaskNotFound.openapi,
 )
 def get_task(task_id: int, db: Session = Depends(get_db)):
-    task = (
-        db.query(model.Task)
-        .options(joinedload(model.Task.category))
-        .filter(model.Task.id == task_id)
-        .first()
-    )
+    task = db.get(model.Task, task_id)
     if task is None:
         raise TaskNotFound(task_id)
     return task
@@ -56,13 +51,7 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
 # get all/many
 @router.get("", response_model=list[schemas.TaskRead])
 def list_tasks(db: Session = Depends(get_db), skip: int = 0, limit: int = 50):
-    return (
-        db.query(model.Task)
-        .options(joinedload(model.Task.category))
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
+    return db.query(model.Task).offset(skip).limit(limit).all()
 
 
 @router.patch(
@@ -96,10 +85,8 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 # Note: living under /tasks/categories as a teaching shortcut.
 # In a real codebase these would have their own router.
 
-cat_router = APIRouter(
-    prefix="/categories",
-    tags=["categories"]
-)
+cat_router = APIRouter(prefix="/categories", tags=["categories"])
+
 
 @cat_router.post("", response_model=schemas.CategoryRead, status_code=201)
 def create_category(payload: schemas.CategoryCreate, db: Session = Depends(get_db)):

@@ -29,8 +29,6 @@ class Task(Base):
     priority: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
-
-
     """
     Nya kolumner för att få relationer mellan tasks
     """
