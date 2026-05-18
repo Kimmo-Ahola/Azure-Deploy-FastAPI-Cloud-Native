@@ -1,6 +1,5 @@
 # fil för att skapa FastAPI
 from fastapi import FastAPI
-from app.database import Base, engine
 from app.routers import tasks
 
 # skapar databasen automatiskt baserat på våra klasser
@@ -8,7 +7,7 @@ from app.routers import tasks
 # vi ska ersätta med alembic nästa lektion
 
 app = FastAPI(
-    title="My \"real production style\" api",
+    title='My "real production style" api',
     description="""
 A simple tasks API built as a demo.
 
