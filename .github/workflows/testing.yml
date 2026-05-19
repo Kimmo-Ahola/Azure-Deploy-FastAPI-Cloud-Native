@@ -41,7 +41,7 @@ jobs:
   ## om testerna lyckas så bygger vi och pushar en image till docker hub
   build-and-push: 
     needs: test
-    if: github.ref == 'ref/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
