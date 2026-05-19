@@ -7,7 +7,7 @@ from app.routers import tasks
 # vi ska ersätta med alembic nästa lektion
 
 app = FastAPI(
-    title='My "Fake" api',
+    title='My "Fake 123" api',
     description="""
 A simple tasks API built as a demo.
 
